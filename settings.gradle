@@ -1,0 +1,6 @@
+rootProject.name = 'hibernate_things'
+
+include 'performance'
+include 'soft_reference'
+include 'transactions'
+

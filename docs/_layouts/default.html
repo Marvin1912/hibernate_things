@@ -9,12 +9,12 @@
 
     <body class="grid-container">
         {% include header.html %}
-        <div class="grid-item content">
+        <main class="grid-item-content">
+            {% include sidebar.html %}
             <div class="flex-container-content">
-                {% include sidebar.html %}
                 {% include content.html %}
             </div>
-        </div>
+        </main>
         {% include footer.html %}
     </body>
 </html>

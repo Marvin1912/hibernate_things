@@ -7,17 +7,14 @@
 
     <body class="grid-container">
         {% include header.html %}
-        <div class="grid-item content">
-            <div class="flex-container-content">
-                {% include sidebar.html %}
-                <div class="flex-container-content-post">
-                    <h2>{{ page.title }}</h2>
-                    <div class="post-content">
-                        {{ page.content }}
-                    </div>
-                </div>
+        <main class="grid-item-content">
+            {% include sidebar.html %}
+            <div class="flex-container-content-post">
+                <h2>{{ page.title }}</h2>
+                <div>{{ page.content }}</div>
+                <div>{{ page.code_test }}</div>
             </div>
-        </div>
+        </main>
         {% include footer.html %}
     </body>
 

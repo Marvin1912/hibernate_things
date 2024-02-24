@@ -35,9 +35,13 @@ application performance. Before solutions can be proposed, it is first necessary
 under what circumstances Hibernate performs dirty checks. There are several scenarios in which Hibernate
 triggers a dirty check, but the most obvious and probably most common reason is
 the [flush before the commit](https://vladmihalcea.com/the-anatomy-of-hibernate-dirty-checking/)
-of a transaction. The influence that such a dirty check can have per existing entity is shown in the following graphic.
+of a transaction. The influence that such a dirty check can have per existing entity is shown in the following graphic, 
+whereby a parent entity object with 250 child entity objects was created in each of the 500 runs, resulting in a total 
+of 125,500 objects within the database in the last run.
 
-![pc_entity_dirty_check]({{ site.baseurl }}/img/pc_entity_dirty_check.png)
+<div class="image-container">
+    <img class="image" src="{{ site.baseurl }}/img/pc_entity_dirty_check.png" alt="Dirty checks of entities">
+</div>
 
 The data was created by the initial retrieval of a set of entities that were included in the persistence context through
 this very process and thus became relevant for the dirty checks. The corresponding code is briefly presented in the
@@ -74,5 +78,17 @@ method must be executed within a transaction context. If the method is called ou
 transaction context must be started. If the method is called within a transaction context, the execution of the method
 is simply continued in this context.
 
-However, the following question remains: **If a ```flush()``` and thus a one-time dirty check is only executed at the
-end of a transaction, i.e. in this case at the end of the method, why does the runtime increase so massively?**
+To clarify the temporal influence of the dirty checks, the call to query the children (`childrenSupplier.get();`)
+was removed and thus a large part of the entities were removed from the process and thus also from the sphere of
+influence of the persistence context and the dirty checks. The influence of the entities within the persistence
+context is clearly shown in the following graphic.
+
+<div class="image-container">
+    <img class="image" src="{{ site.baseurl }}/img/pc_entity_dirty_check_clean.png" alt="Dirty checks of entities">
+</div>
+
+However, the following question remains: **If a ```flush()``` and thus a one-time dirty check is only executed at the end of a transaction, i.e. in this case
+at the end of the method, why does the runtime increase so massively, if the child entities are present in the
+persistence context?** (F.e. an iteration over 125,500 objects takes 0.95ms on average.)
+
+The answer to this behavior lies in the depths of the Hibernate code.

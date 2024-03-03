@@ -1,8 +1,14 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Performance" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+  <configuration default="false" name="Persistence Context" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="hibernate_things.performance.main" />
     <option name="PROGRAM_PARAMETERS" value="PERSISTENCE_CONTEXT" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.marvin.hibernate.Application" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.marvin.hibernate.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

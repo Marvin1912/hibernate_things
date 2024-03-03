@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +46,17 @@ public class PersistenceContextService {
 
         final List<CsvLine> csvLines = new ArrayList<>();
 
-        for (int i = 0; i < 250; i++) {
+        for (int i = 0; i < 500; i++) {
             LOGGER.info("RUN: {}", i);
             long objects = generator.generateRootObjects(1, 250);
 
-            LOGGER.info("[{}][ENTITY] {}ms", objects, dataProcessor.fetchDataEntity());
-            csvLines.add(new CsvLine(objects, "ENTITY", dataProcessor.fetchDataEntity()));
+            BigDecimal time = dataProcessor.fetchDataEntity();
+            LOGGER.info("[{}][ENTITY] {}ms", objects, time);
+            csvLines.add(new CsvLine(objects, "ENTITY", time.doubleValue()));
 
-            LOGGER.info("[{}][DTO] {}ms", objects, dataProcessor.fetchDataDto());
-            csvLines.add(new CsvLine(objects, "DTO", dataProcessor.fetchDataDto()));
+            time = dataProcessor.fetchDataDto();
+            LOGGER.info("[{}][DTO] {}ms", objects, time);
+            csvLines.add(new CsvLine(objects, "DTO", time.doubleValue()));
         }
 
         csvWriter.writeListToCsv(Path.of(csvOutputFile), csvLines, CsvLine.class);
